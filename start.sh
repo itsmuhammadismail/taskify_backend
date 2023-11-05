@@ -1,4 +1,5 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
 source env/bin/activate
-python3 -m uvicorn main:app --host=0.0.0.0 --workers=4
+uvicorn src.main:app --uds=/tmp/uvicorn.sock

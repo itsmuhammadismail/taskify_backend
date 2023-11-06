@@ -5,6 +5,8 @@ def task_history_entity(task) -> dict:
         "task": task["task"],
         "start_time": task["start_time"],
         "end_time": task["end_time"],
+        "is_started": task["is_started"],
+        "is_completed": task["is_completed"],
     }
 
 

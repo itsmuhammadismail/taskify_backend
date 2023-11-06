@@ -11,18 +11,18 @@ router = APIRouter(
 )
 
 
-@router.get("/")
-async def read_users():
-    users_data = db.users.find({})
+# @router.get("/")
+# async def read_users():
+#     users_data = db.users.find({})
 
-    if not users_data or users_data == []:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={"message": "user not found"}
-        )
-
-    users = users_entity(users_data)
-    return users
+#     if not users_data or users_data == []:
+#         return JSONResponse(
+#             status_code=status.HTTP_400_BAD_REQUEST,
+#             content={"message": "user not found"}
+#         )
+# 
+#     users = users_entity(users_data)
+#     return users
 
 
 @router.get("/")
@@ -59,14 +59,13 @@ async def create_user(user: User):
         "first_name": user.first_name,
         "last_name": user.last_name,
         "email": user.email,
+        "password": user.password,
         "dob": str(user.dob),
         "gender": user.gender,
         "university": user.university,
         "mobile": user.mobile,
         "country": user.country
     })
-
-    print(new_user.inserted_id)
 
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
@@ -82,6 +81,7 @@ async def update_user(id: str, user: User):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "email": user.email,
+            "password": user.password,
             "dob": str(user.dob),
             "gender": user.gender,
             "university": user.university,

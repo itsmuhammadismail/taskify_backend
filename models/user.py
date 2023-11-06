@@ -7,6 +7,7 @@ class User(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
+    password: str
     dob: date
     gender: str
     university: Optional[str]

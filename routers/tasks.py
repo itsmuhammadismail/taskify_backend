@@ -26,9 +26,9 @@ async def read_tasks(id: str):
     tasks_list = tasks_entity(tasks_data)
     
     # Sort tasks by due_date and then by status (high > medium > low)
-    sorted_tasks = sorted(tasks_list, key=lambda x: (x.due_date, {"high": 0, "medium": 1, "low": 2}[x.status]))
+    # sorted_tasks = sorted(tasks_list, key=lambda x: (x.due_date, {"high": 0, "medium": 1, "low": 2}[x.status]))
 
-    return sorted_tasks
+    return tasks_list
 
 
 @router.get("/{id}")

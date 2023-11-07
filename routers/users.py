@@ -67,13 +67,9 @@ async def create_user(user: User):
         "country": user.country
     })
 
-    print(new_user)
+    find_user = db.users.find_one({"_id":  new_user.inserted_id})
 
-    # return JSONResponse(
-    #     status_code=status.HTTP_201_CREATED,
-    #     content={"message": "User created successfully",
-    #              "id": new_user.inserted_id}
-    return {"message": "User created successfully"}
+    return user_entity(find_user)
 
 
 @router.put("/{id}")

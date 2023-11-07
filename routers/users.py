@@ -20,7 +20,7 @@ router = APIRouter(
 #             status_code=status.HTTP_400_BAD_REQUEST,
 #             content={"message": "user not found"}
 #         )
-# 
+#
 #     users = users_entity(users_data)
 #     return users
 
@@ -67,11 +67,13 @@ async def create_user(user: User):
         "country": user.country
     })
 
-    return JSONResponse(
-        status_code=status.HTTP_201_CREATED,
-        content={"message": "User created successfully",
-                 "id": new_user.inserted_id}
-    )
+    print(new_user)
+
+    # return JSONResponse(
+    #     status_code=status.HTTP_201_CREATED,
+    #     content={"message": "User created successfully",
+    #              "id": new_user.inserted_id}
+    return {"message": "User created successfully"}
 
 
 @router.put("/{id}")

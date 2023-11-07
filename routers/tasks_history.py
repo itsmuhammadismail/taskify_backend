@@ -8,7 +8,7 @@ from datetime import datetime
 
 router = APIRouter(
     prefix="/tasks_history",
-    tags=["Tasks"],
+    tags=["Tasks History"],
 )
 
 

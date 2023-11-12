@@ -14,7 +14,8 @@ router = APIRouter(
 @router.get("/")
 async def read_tasks(id: str):
     tasks_data = db.tasks.find({
-        "user": ObjectId(id)
+        "user": ObjectId(id),
+        "is_pending": True
     })
 
     if not tasks_data or tasks_data == []:
@@ -24,11 +25,12 @@ async def read_tasks(id: str):
         )
 
     tasks_list = tasks_entity(tasks_data)
-    
-    # Sort tasks by due_date and then by status (high > medium > low)
-    # sorted_tasks = sorted(tasks_list, key=lambda x: (x.due_date, {"high": 0, "medium": 1, "low": 2}[x.status]))
 
-    return tasks_list
+    # Sort tasks by due_date and then by status (high > medium > low)
+    sorted_tasks = sorted(tasks_list, key=lambda x: (
+        x['due_date'], {"high": 0, "medium": 1, "low": 2}[x['status']]))
+
+    return sorted_tasks
 
 
 @router.get("/{id}")
@@ -51,7 +53,8 @@ async def create_task(task: Task):
         "desc": task.desc,
         "due_date": str(task.due_date),
         "status": task.status,
-        "user": ObjectId(task.user)
+        "user": ObjectId(task.user),
+        "is_pending": True
     })
 
     return JSONResponse(

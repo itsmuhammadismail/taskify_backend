@@ -24,7 +24,7 @@ async def read_tasks_history(id: str):
             content={"message": "task not found"}
         )
 
-    tasks = tasks_entity(tasks_data)
+    tasks = tasks_history_entity(tasks_data)
     return tasks
 
 
@@ -38,29 +38,35 @@ async def read_task_history(id: str):
             content={"message": "task not found"}
         )
 
-    task = task_entity(task_data)
+    task = task_history_entity(task_data)
     return task
 
 
 @router.post("/")
 async def create_task_history(task: TaskHistory):
+    db.tasks.find_one_and_update({"_id": ObjectId(task.task)}, {
+        "$set": {
+            "is_pending": False,
+        }
+    })
+
     db.task_history.insert_one({
         "user": ObjectId(task.user),
         "task": ObjectId(task.task),
         "start_time": str(datetime.now()),
-        "end_time": Null,
+        "end_time": None,
         "is_started": True,
         "is_completed": False,
     })
 
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
-        content={"message": "task created successfully"}
+        content={"message": "task history created successfully"}
     )
 
 
 @router.put("/complete/{id}")
-async def update_task_history(id: str, task: TaskHistory):
+async def update_task_history(id: str):
     db.task_history.find_one_and_update({"_id": ObjectId(id)}, {
         "$set": {
             "end_time": str(datetime.now()),
@@ -74,7 +80,6 @@ async def update_task_history(id: str, task: TaskHistory):
 @router.delete("/all/{id}")
 async def delete_all_task_history(id: str):
     db.task_history.find_and_delete({"user": ObjectId(id)})
-
     return {"message": "task deleted successfully"}
 
 

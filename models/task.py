@@ -14,3 +14,4 @@ class Task(BaseModel):
     due_date: datetime
     status: StatusEnum = StatusEnum.medium
     user: str
+    is_pending: bool = True

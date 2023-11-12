@@ -55,19 +55,26 @@ async def read_user(id: str):
 
 @router.post("/")
 async def create_user(user: User):
-    new_user = db.users.insert_one({
-        "first_name": user.first_name,
-        "last_name": user.last_name,
-        "email": user.email,
-        "password": user.password,
-        "dob": str(user.dob),
-        "gender": user.gender,
-        "university": user.university,
-        "mobile": user.mobile,
-        "country": user.country
-    })
+    user_data = db.users.find_one({"email": user.email})
+    find_user = None
 
-    find_user = db.users.find_one({"_id":  new_user.inserted_id})
+    if (user_data is None or user_data is {}):
+        new_user = db.users.insert_one({
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "password": user.password,
+            "dob": str(user.dob),
+            "gender": user.gender,
+            "university": user.university,
+            "mobile": user.mobile,
+            "country": user.country
+        })
+
+        find_user = db.users.find_one({"_id":  new_user.inserted_id})
+
+    else:
+        find_user = user_data
 
     return user_entity(find_user)
 

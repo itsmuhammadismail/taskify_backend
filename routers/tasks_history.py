@@ -14,9 +14,22 @@ router = APIRouter(
 
 @router.get("/")
 async def read_tasks_history(id: str):
-    tasks_data = db.task_history.find({
-        "user": ObjectId(id)
-    })
+    lookup_stage = {
+        "$lookup": {
+            "from": "tasks",  # the collection to join
+            "localField": "task",  # the field from the input documents
+            "foreignField": "_id",  # the field from the joined documents
+            "as": "task_details"  # the output array field
+        }
+    }
+
+    match_stage = {
+        "$match": {
+            "user": ObjectId(id)
+        }
+    }
+
+    tasks_data = db.task_history.aggregate([match_stage, lookup_stage])
 
     if not tasks_data or tasks_data == []:
         return JSONResponse(

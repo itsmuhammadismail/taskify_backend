@@ -8,7 +8,8 @@ def user_entity(user) -> dict:
         "gender": user["gender"],
         "university": user.get("university", ""),
         "mobile": user.get("mobile", ""),
-        "country": user.get("country", "")
+        "country": user.get("country", ""),
+        "password": user.get("password", ""),
     }
 
 

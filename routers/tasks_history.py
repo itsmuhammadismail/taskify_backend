@@ -81,7 +81,7 @@ async def create_task_history(task: TaskHistory):
 
 @router.put("/complete/{id}")
 async def update_task_history(id: str):
-    db.task_history.find_one_and_update({"_id": ObjectId(id)}, {
+    db.task_history.find_one_and_update({"task": ObjectId(id)}, {
         "$set": {
             "end_time": str(datetime.now()),
             "is_completed": True,

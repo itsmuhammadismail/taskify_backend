@@ -88,13 +88,11 @@ async def update_task_history(id: str):
         }
     })
 
-    res = db.task_history.find_one({"_id": ObjectId(id)})
-    if res:
-        db.tasks.find_one_and_update({"_id": ObjectId(str(res['task']))}, {
-            "$set": {
-                "running_status": "finished"
-            }
-        })
+    db.tasks.find_one_and_update({"_id": ObjectId(id)}, {
+        "$set": {
+            "running_status": "finished"
+        }
+    })
 
     return {"message": "task updated successfully"}
 

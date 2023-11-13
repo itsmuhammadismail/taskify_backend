@@ -33,6 +33,28 @@ async def read_tasks(id: str):
     return sorted_tasks
 
 
+@router.get("/started/")
+async def read_running_tasks(id: str):
+    tasks_data = db.tasks.find({
+        "user": ObjectId(id),
+        "running_status": "started"
+    })
+
+    if not tasks_data or tasks_data == []:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"message": "task not found"}
+        )
+
+    tasks_list = tasks_entity(tasks_data)
+
+    # Sort tasks by due_date and then by status (high > medium > low)
+    sorted_tasks = sorted(tasks_list, key=lambda x: (
+        x['due_date'].split(' ')[0], {"high": 0, "medium": 1, "low": 2}[x['status']]))
+
+    return sorted_tasks
+
+
 @router.get("/{id}")
 async def read_task(id: str):
     task_data = db.tasks.find_one({"_id":  ObjectId(id)})

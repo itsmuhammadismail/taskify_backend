@@ -28,7 +28,7 @@ async def read_tasks(id: str):
 
     # Sort tasks by due_date and then by status (high > medium > low)
     sorted_tasks = sorted(tasks_list, key=lambda x: (
-        x['due_date'], {"high": 0, "medium": 1, "low": 2}[x['status']]))
+        x['due_date'].split(' ')[0], {"high": 0, "medium": 1, "low": 2}[x['status']]))
 
     return sorted_tasks
 
@@ -54,7 +54,8 @@ async def create_task(task: Task):
         "due_date": str(task.due_date),
         "status": task.status,
         "user": ObjectId(task.user),
-        "is_pending": True
+        "is_pending": True,
+        "running_status": "pending"
     })
 
     return JSONResponse(
@@ -79,5 +80,12 @@ async def update_task(id: str, task: Task):
 @router.delete("/{id}")
 async def delete_task(id: str):
     db.tasks.find_one_and_delete({"_id": ObjectId(id)})
+
+    return {"message": "task deleted successfully"}
+
+
+@router.delete("/all/")
+async def delete_all_task():
+    db.tasks.delete_many({})
 
     return {"message": "task deleted successfully"}

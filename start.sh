@@ -1,5 +1,6 @@
-#!/bin/bash
-
-cd "$(dirname "$0")"
-source env/bin/activate
-guvicorn main:app --host=0.0.0.0 --workers=4
+git pull
+sudo docker build -t taskify/taskify:1.0 .
+sudo docker stop Taskify
+sudo docker rm Taskify
+sudo docker run -p 8080:8080 -d --name Taskify taskify/taskify:1.0
+sudo docker logs Taskify

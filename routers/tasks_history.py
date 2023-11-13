@@ -60,6 +60,7 @@ async def create_task_history(task: TaskHistory):
     db.tasks.find_one_and_update({"_id": ObjectId(task.task)}, {
         "$set": {
             "is_pending": False,
+            "running_status": "started"
         }
     })
 
@@ -87,12 +88,20 @@ async def update_task_history(id: str):
         }
     })
 
+    res = db.task_history.find_one({"_id": ObjectId(id)})
+    if res:
+        db.tasks.find_one_and_update({"_id": ObjectId(str(res['task']))}, {
+            "$set": {
+                "running_status": "finished"
+            }
+        })
+
     return {"message": "task updated successfully"}
 
 
 @router.delete("/all/{id}")
 async def delete_all_task_history(id: str):
-    db.task_history.find_and_delete({"user": ObjectId(id)})
+    db.task_history.delete_many({"user": ObjectId(id)})
     return {"message": "task deleted successfully"}
 
 

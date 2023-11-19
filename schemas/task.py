@@ -1,4 +1,9 @@
 def task_entity(task) -> dict:
+    updated_at = task["due_date"]
+
+    if "updated_at" in task:
+        updated_at = task["updated_at"]
+
     return {
         "id": str(task["_id"]),
         "desc": task["desc"],
@@ -6,7 +11,7 @@ def task_entity(task) -> dict:
         "status": task["status"],
         "user": str(task["user"]),
         "is_pending": task["is_pending"],
-        "updated_at": task["updated_at"] or None
+        "updated_at": updated_at
     }
 
 

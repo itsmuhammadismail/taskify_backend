@@ -114,7 +114,7 @@ async def delete_task_history(id: str):
 @router.get("/graph/{id}")
 async def get_graph_data(id: str):
     dateTimeList = list(map(lambda n: datetime.now() -
-                        timedelta(minutes=n), [0, 15, 30, 45, 60, 75]))
+                        timedelta(minutes=n), [0, 15, 30, 45, 60, 75, 90]))
     counts = [0 for date in dateTimeList]
 
     lookup_stage = {

@@ -60,7 +60,8 @@ async def create_task_history(task: TaskHistory):
     db.tasks.find_one_and_update({"_id": ObjectId(task.task)}, {
         "$set": {
             "is_pending": False,
-            "running_status": "started"
+            "running_status": "started",
+            "updated_at": datetime.now()
         }
     })
 

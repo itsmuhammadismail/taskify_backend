@@ -5,7 +5,8 @@ def task_entity(task) -> dict:
         "due_date": task["due_date"],
         "status": task["status"],
         "user": str(task["user"]),
-        "is_pending": task["is_pending"]
+        "is_pending": task["is_pending"],
+        "updated_at": task["updated_at"] or None
     }
 
 

@@ -4,6 +4,7 @@ from schemas.task import task_entity, tasks_entity
 from fastapi.responses import JSONResponse
 from bson.objectid import ObjectId
 from models.task import Task
+from datetime import datetime
 
 router = APIRouter(
     prefix="/tasks",
@@ -77,7 +78,8 @@ async def create_task(task: Task):
         "status": task.status,
         "user": ObjectId(task.user),
         "is_pending": True,
-        "running_status": "pending"
+        "running_status": "pending",
+        "updated_at": datetime.now()
     })
 
     return JSONResponse(

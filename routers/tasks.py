@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from bson.objectid import ObjectId
 from models.task import Task
 from datetime import datetime
+from ai_model.index import recommender
 
 router = APIRouter(
     prefix="/tasks",
@@ -113,3 +114,25 @@ async def delete_all_task():
     db.tasks.delete_many({})
 
     return {"message": "task deleted successfully"}
+
+
+@router.get("/recommendation/{id}")
+async def get_recommendation(id: str):
+    todo_tasks_list = db.tasks.find({
+        "user": ObjectId(id),
+        "running_status": "pending",
+    })
+    running_tasks_list = db.tasks.find({
+        "user": ObjectId(id),
+        "running_status": "started",
+    })
+
+    if not todo_tasks_list or not running_tasks_list or todo_tasks_list == [] or running_tasks_list == []:
+        return []
+
+    todo_tasks = tasks_entity(todo_tasks_list)
+    running_tasks = tasks_entity(running_tasks_list)
+
+    recommended_tasks = recommender(running_tasks, todo_tasks)
+
+    return recommended_tasks

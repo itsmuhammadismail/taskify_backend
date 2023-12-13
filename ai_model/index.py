@@ -27,7 +27,9 @@ def recommender(running_tasks, todo_tasks):
     distances = sorted(
         list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
 
-    recommended_task_df = todo_tasks_df.iloc[distances[1][0]]
-    recommended_tasks = recommended_task_df.to_dict()
-
-    return recommended_tasks
+    try:
+        recommended_task_df = todo_tasks_df.iloc[distances[1][0]]
+        recommended_tasks = recommended_task_df.to_dict()
+        return recommended_tasks
+    except:
+        return []
